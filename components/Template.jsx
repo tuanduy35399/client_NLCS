@@ -4,7 +4,9 @@ export function Header() {
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         <div className="navbar bg-base-300 w-full">
-          <div className="mx-2 flex-1 px-2 text-xl font-bold">GUESS YOUR JOB</div>
+          <div className="mx-2 flex-1 px-2 text-xl font-bold">
+            GUESS YOUR JOB
+          </div>
           <div className="hidden flex-none lg:block">
             <ul className="menu menu-horizontal">
               <li>
@@ -26,11 +28,10 @@ export function Header() {
 export function Footer() {
   return (
     <>
-      <footer className="footer sm:footer-horizontal bg-neutral text-neutral-content p-10">
+      <footer className="footer sm:footer-horizontal bg-neutral text-neutral-content p-10 ">
         <nav>
           <h6 className="footer-title">Contact me</h6>
-
-          <div className="flex flex-row items-center gap-4 mt-2">
+          <div className="flex flex-row items-center justify-between gap-5 mt-2">
             <a className="link link-hover">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -68,8 +69,8 @@ export function Footer() {
               </svg>
             </a>
           </div>
+          <p className="mt-3">&#169; Copyright by Trần Quốc Tuấn Duy</p>
         </nav>
-        <p className="text-center">&#169; Copyright by Trần Quốc Tuấn Duy</p>
       </footer>
     </>
   );
