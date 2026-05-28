@@ -71,115 +71,126 @@ function App() {
   };
 
   return (
-    <>
-      {isLoading ? (
-        <div className="flex justify-center items-center min-h-screen w-full">
-          <span className="loading loading-spinner size-16"></span>
-        </div>
-      ) : (
-        <>
-          <Header />
-          <div className="w-full min-h-screen flex justify-center items-center">
-            <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xl border p-4 ">
-              <p className="text-2xl font-medium mb-3 text-center">
-                Nhập điểm thi THPT của bạn
-              </p>
-              <div className="flex flex-row flex-warp justify-center items-start gap-5">
-                {/* Cot 1 */}
-                <div className="w-45 flex flex-col gap-4">
-                  <div>
-                    <label className="label">Toán học</label>
-                    <input
-                      type="number"
-                      step="0.01" //cho phep nhap so thap phan 2 chu so
-                      className={`input input-bordered w-full ${errors.math ? "input-error" : ""}`}
-                      {...register("math")}
-                      placeholder="Nhập số từ 0 to 10"
-                    />
-                    {errors.math && (
-                      <p className="text-error text-xs mt-1">
-                        {errors.math.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="label">Ngữ văn</label>
-                    <input
-                      type="number"
-                      step="0.01" //cho phep nhap so thap phan 2 chu so
-                      className={`input input-bordered w-full ${errors.literature ? "input-error" : ""}`}
-                      {...register("literature")}
-                      placeholder="Nhập số từ 0 to 10"
-                    />
-                    {errors.literature && (
-                      <p className="text-error text-xs mt-1">
-                        {errors.literature.message}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                {/* Cot 2 */}
-                <div className="w-80 flex flex-col gap-4">
-                  <div>
-                    <label className="label">Môn tự chọn 1</label>
-                    <div className="flex flex-row gap-2">
-                      <label class="select">
-                        <select>
-                          <option>Vật Lý</option>
-                          <option>Hóa Học</option>
-                        </select>
-                      </label>
-                      <input
-                        type="number"
-                        step="0.01" //cho phep nhap so thap phan 2 chu so
-                        className={`input input-bordered w-full ${errors.thirdSubject ? "input-error" : ""}`}
-                        {...register("thirdSubject")}
-                        placeholder="Nhập số từ 0 to 10"
-                      />
-                    </div>
-                    {errors.thirdSubject && (
-                      <p className="text-error text-xs mt-1">
-                        {errors.thirdSubject.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="label">Môn tự chọn 2</label>
-                    <div className="flex flex-row gap-2">
-                      <label class="select">
-                        <select>
-                          <option>Vật Lý</option>
-                          <option>Hóa Học</option>
-                        </select>
-                      </label>
-                      <input
-                        type="number"
-                        step="0.01" //cho phep nhap so thap phan 2 chu so
-                        className={`input input-bordered w-full ${errors.fourthSubject ? "input-error" : ""}`}
-                        {...register("fourthSubject")}
-                        placeholder="Nhập số từ 0 to 10"
-                      />
-                    </div>
-                    {errors.fourthSubject && (
-                      <p className="text-error text-xs mt-1">
-                        {errors.fourthSubject.message}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <button
-                className="btn btn-neutral mt-4 w-full"
-                disabled={!isValid}
-              >
-                Gửi dữ liệu điểm
-              </button>
-            </fieldset>
+    <div>
+      <div
+        style={{
+          background: "white",
+          backgroundImage: `
+            linear-gradient(to right, rgba(71,85,105,0.15) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(71,85,105,0.15) 1px, transparent 1px),
+            radial-gradient(circle at 50% 60%, rgba(236,72,153,0.15) 0%, rgba(168,85,247,0.05) 40%, transparent 70%)`,
+          backgroundSize: "40px 40px, 40px 40px, 100% 100%",
+        }}
+      >
+        {isLoading ? (
+          <div className="flex justify-center items-center min-h-screen w-full">
+            <span className="loading loading-spinner size-16"></span>
           </div>
-          <Footer />
-        </>
-      )}
-    </>
+        ) : (
+          <>
+            <Header />
+            <div className="w-full min-h-screen flex justify-center items-center ">
+              <form className="fieldset bg-base-200 border-base-300 rounded-box w-xl border p-4 ">
+                <p className="text-2xl font-medium mb-3 text-center">
+                  Nhập điểm thi THPT của bạn
+                </p>
+                <div className="flex flex-row justify-center items-start gap-5">
+                  {/* Cot 1 */}
+                  <div className="w-45 flex flex-col gap-4">
+                    <div>
+                      <label className="label">Toán học</label>
+                      <input
+                        type="number"
+                        step="0.01" //cho phep nhap so thap phan 2 chu so
+                        className={`input input-bordered w-full ${errors.math ? "input-error" : ""}`}
+                        {...register("math")}
+                        placeholder="Nhập số từ 0 to 10"
+                      />
+                      {errors.math && (
+                        <p className="text-error text-xs mt-1">
+                          {errors.math.message}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="label">Ngữ văn</label>
+                      <input
+                        type="number"
+                        step="0.01" //cho phep nhap so thap phan 2 chu so
+                        className={`input input-bordered w-full ${errors.literature ? "input-error" : ""}`}
+                        {...register("literature")}
+                        placeholder="Nhập số từ 0 to 10"
+                      />
+                      {errors.literature && (
+                        <p className="text-error text-xs mt-1">
+                          {errors.literature.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  {/* Cot 2 */}
+                  <div className="w-80 flex flex-col gap-4">
+                    <div>
+                      <label className="label">Môn tự chọn 1</label>
+                      <div className="flex flex-row gap-2">
+                        <label class="select">
+                          <select>
+                            <option>Vật Lý</option>
+                            <option>Hóa Học</option>
+                          </select>
+                        </label>
+                        <input
+                          type="number"
+                          step="0.01" //cho phep nhap so thap phan 2 chu so
+                          className={`input input-bordered w-full ${errors.thirdSubject ? "input-error" : ""}`}
+                          {...register("thirdSubject")}
+                          placeholder="Nhập số từ 0 to 10"
+                        />
+                      </div>
+                      {errors.thirdSubject && (
+                        <p className="text-error text-xs mt-1">
+                          {errors.thirdSubject.message}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="label">Môn tự chọn 2</label>
+                      <div className="flex flex-row gap-2">
+                        <label class="select">
+                          <select>
+                            <option>Vật Lý</option>
+                            <option>Hóa Học</option>
+                          </select>
+                        </label>
+                        <input
+                          type="number"
+                          step="0.01" //cho phep nhap so thap phan 2 chu so
+                          className={`input input-bordered w-full ${errors.fourthSubject ? "input-error" : ""}`}
+                          {...register("fourthSubject")}
+                          placeholder="Nhập số từ 0 to 10"
+                        />
+                      </div>
+                      {errors.fourthSubject && (
+                        <p className="text-error text-xs mt-1">
+                          {errors.fourthSubject.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <button
+                  className="btn btn-neutral mt-4 w-full"
+                  disabled={!isValid}
+                >
+                  Gửi dữ liệu điểm
+                </button>
+              </form>
+            </div>
+            <Footer />
+          </>
+        )}
+      </div>
+    </div>
   );
 }
 
