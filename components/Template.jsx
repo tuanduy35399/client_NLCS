@@ -13,6 +13,9 @@ export function Header() {
                 <a>What is this?</a>
               </li>
               <li>
+                <a>Buy me a coffee</a>
+              </li>
+              <li>
                 <a href="https://mydognet.vercel.app" target="blank">
                   About me
                 </a>
