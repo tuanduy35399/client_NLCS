@@ -1,195 +1,102 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import "./App.css";
 import { Header, Footer } from "../components/Template";
-//Từ thư viện zod
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import Phase1 from "./components/Phase1";
+import Phase2 from "./components/Phase2";
+import Phase3 from "./components/Phase3";
 
-//Dinh nghia schema
-//Moi o input se duoc quy dinh kiem tra
-const scoreFormSchema = z.object({
-  math: z
-    .string()
-    .min(1, { message: "Vui lòng nhập điểm Toán" })
-    .refine(
-      (val) => {
-        const num = parseFloat(val);
-        return !isNaN(num) && num >= 0 && num <= 10;
-      },
-      { message: "Điểm Toán phải nằm trong phạm vi từ 0 đến 10" },
-    ),
-
-  literature: z
-    .string()
-    .min(1, { message: "Vui lòng nhập điểm Văn" })
-    .refine(
-      (val) => {
-        const num = parseFloat(val);
-        return !isNaN(num) && num >= 0 && num <= 10;
-      },
-      { message: "Điểm Văn phải nằm trong phạm vi từ 0 đến 10" },
-    ),
-
-  thirdSubject: z
-    .string()
-    .min(1, { message: "Vui lòng nhập điểm môn thứ ba" })
-    .refine(
-      (val) => {
-        const num = parseFloat(val);
-        return !isNaN(num) && num >= 0 && num <= 10;
-      },
-      { message: "Điểm số phải nằm trong phạm vi từ 0 đến 10" },
-    ),
-
-  fourthSubject: z
-    .string()
-    .min(1, { message: "Vui lòng nhập điểm môn thứ ba" })
-    .refine(
-      (val) => {
-        const num = parseFloat(val);
-        return !isNaN(num) && num >= 0 && num <= 10;
-      },
-      { message: "Điểm số phải nằm trong phạm vi từ 0 đến 10" },
-    ),
-});
 function App() {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-  } = useForm({
-    resolver: zodResolver(scoreFormSchema),
-    mode: "onChange", // Kiểm tra lỗi real-time ngay khi người dùng gõ phím
+  const [currentPhase, setCurrentPhase] = useState(1);
+  const [appData, setAppData] = useState({
+    phase1: null,
+    phase2: null,
   });
 
-  const onSubmit = (data) => {
-    console.log("Dữ liệu form hợp lệ gửi lên:", data);
-    //Call API
+  const handlePhase1Next = (data) => {
+    setAppData(prev => ({ ...prev, phase1: data }));
+    setCurrentPhase(2);
+  };
+
+  const handlePhase2Next = (data) => {
+    setAppData(prev => ({ ...prev, phase2: data }));
+    setCurrentPhase(3);
+  };
+
+  const handleBackToPhase1 = () => {
+    setCurrentPhase(1);
+  };
+
+  const handleBackToPhase2 = () => {
+    setCurrentPhase(2);
+  };
+
+  const handleRestart = () => {
+    setAppData({ phase1: null, phase2: null });
+    setCurrentPhase(1);
   };
 
   return (
-    <div>
-      <div
-        style={{
-          background: "white",
-          backgroundImage: `
-            linear-gradient(to right, rgba(71,85,105,0.15) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(71,85,105,0.15) 1px, transparent 1px),
-            radial-gradient(circle at 50% 60%, rgba(236,72,153,0.15) 0%, rgba(168,85,247,0.05) 40%, transparent 70%)`,
-          backgroundSize: "40px 40px, 40px 40px, 100% 100%",
-        }}
-      >
-        {isLoading ? (
-          <div className="flex justify-center items-center min-h-screen w-full">
-            <span className="loading loading-spinner size-16"></span>
-          </div>
-        ) : (
-          <>
-            <Header />
-            <div className="w-full min-h-screen flex justify-center items-center ">
-              <form className="fieldset bg-base-200 border-base-300 rounded-box w-xl border p-4 ">
-                <p className="text-2xl font-medium mb-3 text-center">
-                  Nhập điểm thi THPT của bạn
-                </p>
-                <div className="flex flex-row justify-center items-start gap-5">
-                  {/* Cot 1 */}
-                  <div className="w-45 flex flex-col gap-4">
-                    <div>
-                      <label className="label">Toán học</label>
-                      <input
-                        type="number"
-                        step="0.01" //cho phep nhap so thap phan 2 chu so
-                        className={`input input-bordered w-full ${errors.math ? "input-error" : ""}`}
-                        {...register("math")}
-                        placeholder="Nhập số từ 0 to 10"
-                      />
-                      {errors.math && (
-                        <p className="text-error text-xs mt-1">
-                          {errors.math.message}
-                        </p>
-                      )}
-                    </div>
-                    <div>
-                      <label className="label">Ngữ văn</label>
-                      <input
-                        type="number"
-                        step="0.01" //cho phep nhap so thap phan 2 chu so
-                        className={`input input-bordered w-full ${errors.literature ? "input-error" : ""}`}
-                        {...register("literature")}
-                        placeholder="Nhập số từ 0 to 10"
-                      />
-                      {errors.literature && (
-                        <p className="text-error text-xs mt-1">
-                          {errors.literature.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  {/* Cot 2 */}
-                  <div className="w-80 flex flex-col gap-4">
-                    <div>
-                      <label className="label">Môn tự chọn 1</label>
-                      <div className="flex flex-row gap-2">
-                        <label class="select">
-                          <select>
-                            <option>Vật Lý</option>
-                            <option>Hóa Học</option>
-                          </select>
-                        </label>
-                        <input
-                          type="number"
-                          step="0.01" //cho phep nhap so thap phan 2 chu so
-                          className={`input input-bordered w-full ${errors.thirdSubject ? "input-error" : ""}`}
-                          {...register("thirdSubject")}
-                          placeholder="Nhập số từ 0 to 10"
-                        />
-                      </div>
-                      {errors.thirdSubject && (
-                        <p className="text-error text-xs mt-1">
-                          {errors.thirdSubject.message}
-                        </p>
-                      )}
-                    </div>
-                    <div>
-                      <label className="label">Môn tự chọn 2</label>
-                      <div className="flex flex-row gap-2">
-                        <label class="select">
-                          <select>
-                            <option>Vật Lý</option>
-                            <option>Hóa Học</option>
-                          </select>
-                        </label>
-                        <input
-                          type="number"
-                          step="0.01" //cho phep nhap so thap phan 2 chu so
-                          className={`input input-bordered w-full ${errors.fourthSubject ? "input-error" : ""}`}
-                          {...register("fourthSubject")}
-                          placeholder="Nhập số từ 0 to 10"
-                        />
-                      </div>
-                      {errors.fourthSubject && (
-                        <p className="text-error text-xs mt-1">
-                          {errors.fourthSubject.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <button
-                  className="btn btn-neutral mt-4 w-full"
-                  disabled={!isValid}
-                >
-                  Gửi dữ liệu điểm
-                </button>
-              </form>
-            </div>
-            <Footer />
-          </>
-        )}
-      </div>
+    <div className="min-h-screen flex flex-col font-sans text-base-content" 
+         style={{
+           backgroundColor: "#f8fafc",
+           backgroundImage: `
+             radial-gradient(at 0% 0%, hsla(253,16%,7%,0.03) 0, transparent 50%), 
+             radial-gradient(at 50% 0%, hsla(225,39%,30%,0.03) 0, transparent 50%), 
+             radial-gradient(at 100% 0%, hsla(339,49%,30%,0.03) 0, transparent 50%)
+           `
+         }}>
+      <Header />
+      
+      <main className="flex-grow container mx-auto px-4 py-10 relative overflow-hidden">
+        <AnimatePresence mode="wait">
+          {currentPhase === 1 && (
+            <motion.div key="phase1"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 50 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              className="h-full flex items-center justify-center"
+            >
+              <Phase1 onNext={handlePhase1Next} initialData={appData.phase1} />
+            </motion.div>
+          )}
+
+          {currentPhase === 2 && (
+            <motion.div key="phase2"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 50 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              className="h-full flex items-center justify-center"
+            >
+              <Phase2 
+                onNext={handlePhase2Next} 
+                onBack={handleBackToPhase1} 
+                phase1Data={appData.phase1}
+              />
+            </motion.div>
+          )}
+
+          {currentPhase === 3 && (
+            <motion.div key="phase3"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.05 }}
+              transition={{ duration: 0.5, type: "spring" }}
+              className="h-full flex items-center justify-center"
+            >
+              <Phase3 
+                data={appData.phase2} 
+                onBack={handleBackToPhase2}
+                onRestart={handleRestart}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </main>
+
+      <Footer />
     </div>
   );
 }
