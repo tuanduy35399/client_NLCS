@@ -4,14 +4,13 @@ import { ArrowRight, BookOpen, GraduationCap, AlertCircle, HeartPulse, Brain } f
 import { playClickSound } from '../utils/audio';
 
 const OPTIONAL_SUBJECTS = [
-  'Vật Lý', 'Hóa Học', 'Sinh Học', 'Lịch Sử', 'Địa Lý', 'Giáo Dục Công Dân'
+  'Vật Lý', 'Hóa Học', 'Sinh Học', 'Lịch Sử', 'Địa Lý', 'Giáo dục kinh tế và pháp luật', 'Công nghệ công nghiệp', 'Công nghệ nông nghiệp', 'Ngoại Ngữ'
 ];
 
 export default function Phase1({ onNext, initialData }) {
   const [grades, setGrades] = useState(initialData?.grades || {
     math: '',
     literature: '',
-    english: '',
     optional1: '',
     optional2: ''
   });
@@ -60,7 +59,7 @@ export default function Phase1({ onNext, initialData }) {
       if (!grades[key]) newErrors[key] = 'Vui lòng nhập điểm';
       else if (!validateGrade(grades[key])) newErrors[key] = 'Điểm không hợp lệ';
     });
-    
+
     if (!selectedSubjects.opt1) newErrors.opt1 = 'Vui lòng chọn môn';
     if (!selectedSubjects.opt2) newErrors.opt2 = 'Vui lòng chọn môn';
     if (!hollandCode || hollandCode.length < 3) newErrors.holland = 'Vui lòng nhập mã Holland (ví dụ: RIA)';
@@ -74,7 +73,7 @@ export default function Phase1({ onNext, initialData }) {
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
@@ -97,19 +96,18 @@ export default function Phase1({ onNext, initialData }) {
               <GraduationCap className="w-5 h-5" />
               Điểm Học Tập
             </h3>
-            
+
             <div className="space-y-4">
               {/* Mandatory Subjects */}
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 {[
                   { id: 'math', label: 'Toán' },
                   { id: 'literature', label: 'Văn' },
-                  { id: 'english', label: 'Ngoại Ngữ' }
                 ].map(sub => (
                   <div key={sub.id} className="form-control">
                     <label className="label py-1"><span className="label-text font-medium">{sub.label}</span></label>
-                    <input 
-                      type="number" 
+                    <input
+                      type="number"
                       min="0" max="10" step="0.1"
                       className={`input input-bordered w-full focus:outline-primary ${errors[sub.id] ? 'input-error' : ''}`}
                       value={grades[sub.id]}
@@ -124,7 +122,7 @@ export default function Phase1({ onNext, initialData }) {
               <div className="space-y-3 pt-2">
                 <label className="label py-1"><span className="label-text font-medium">Môn tự chọn 1</span></label>
                 <div className="flex gap-3">
-                  <select 
+                  <select
                     className={`select select-bordered w-2/3 focus:outline-primary ${errors.opt1 ? 'select-error' : ''}`}
                     value={selectedSubjects.opt1}
                     onChange={(e) => handleSubjectChange('opt1', e.target.value)}
@@ -132,8 +130,8 @@ export default function Phase1({ onNext, initialData }) {
                     <option value="" disabled>Chọn môn học</option>
                     {getAvailableSubjects('opt1').map(sub => <option key={sub} value={sub}>{sub}</option>)}
                   </select>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     min="0" max="10" step="0.1"
                     className={`input input-bordered w-1/3 focus:outline-primary ${errors.optional1 ? 'input-error' : ''}`}
                     value={grades.optional1}
@@ -142,10 +140,10 @@ export default function Phase1({ onNext, initialData }) {
                     disabled={!selectedSubjects.opt1}
                   />
                 </div>
-                
+
                 <label className="label py-1"><span className="label-text font-medium">Môn tự chọn 2</span></label>
                 <div className="flex gap-3">
-                  <select 
+                  <select
                     className={`select select-bordered w-2/3 focus:outline-primary ${errors.opt2 ? 'select-error' : ''}`}
                     value={selectedSubjects.opt2}
                     onChange={(e) => handleSubjectChange('opt2', e.target.value)}
@@ -153,8 +151,8 @@ export default function Phase1({ onNext, initialData }) {
                     <option value="" disabled>Chọn môn học</option>
                     {getAvailableSubjects('opt2').map(sub => <option key={sub} value={sub}>{sub}</option>)}
                   </select>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     min="0" max="10" step="0.1"
                     className={`input input-bordered w-1/3 focus:outline-primary ${errors.optional2 ? 'input-error' : ''}`}
                     value={grades.optional2}
@@ -182,14 +180,14 @@ export default function Phase1({ onNext, initialData }) {
               <Brain className="w-5 h-5" />
               Trắc Nghiệm Holland
             </h3>
-            
+
             <div className="flex-1 flex flex-col justify-center space-y-6">
               <div className="text-center p-6 bg-base-100 rounded-xl shadow-inner border border-base-200 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary to-accent"></div>
                 <p className="mb-4 text-base-content/80">Khám phá nhóm tính cách của bạn để có gợi ý ngành nghề chính xác nhất.</p>
-                
-                <motion.a 
-                  href="https://rightpath.edu.vn/trac-nghiem-ban-than/trac-nghiem-so-thich-holland"
+
+                <motion.a
+                  href="https://unipath.vn/trac-nghiem-holland"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-secondary text-white group relative inline-flex"
@@ -203,14 +201,14 @@ export default function Phase1({ onNext, initialData }) {
                     ease: "easeInOut"
                   }}
                 >
-                  <HeartPulse className="w-5 h-5 mr-2 group-hover:animate-ping absolute opacity-50" />
-                  <HeartPulse className="w-5 h-5 mr-2" />
+                  {/* <HeartPulse className="w-5 h-5 mr-2 group-hover:animate-ping absolute opacity-50" />
+                  <HeartPulse className="w-5 h-5 mr-2" /> */}
                   Làm bài trắc nghiệm tại đây nhé!
                 </motion.a>
-                
+
                 <p className="mt-4 text-xs text-base-content/50 leading-relaxed max-w-[90%] mx-auto">
-                  Nguồn: https://rightpath.edu.vn/<br/>
-                  Tác giả câu hỏi trắc nghiệm: Th.S Trần Thị Thúy Lan và C.N Lê Thị Hương Giang - Đại Học RMIT Việt Nam
+                  Nguồn: unipath.vn<br />
+                  Tác giả: Nguyễn Hoài Thi
                 </p>
               </div>
 
@@ -219,9 +217,9 @@ export default function Phase1({ onNext, initialData }) {
                   <span className="label-text font-medium text-base">Nhập mã Holland của bạn</span>
                   <span className="label-text-alt text-base-content/60">VD: RIA, SEC</span>
                 </label>
-                <input 
-                  type="text" 
-                  placeholder="Nhập 3 chữ cái..." 
+                <input
+                  type="text"
+                  placeholder="Nhập 3 chữ cái..."
                   className={`input input-bordered w-full uppercase focus:outline-secondary ${errors.holland ? 'input-error' : ''}`}
                   value={hollandCode}
                   onChange={(e) => setHollandCode(e.target.value.toUpperCase().replace(/[^a-zA-Z]/g, '').slice(0, 3))}
@@ -235,7 +233,7 @@ export default function Phase1({ onNext, initialData }) {
       </div>
 
       <div className="mt-10 flex justify-end">
-        <button 
+        <button
           onClick={handleContinue}
           className="btn btn-primary px-8 text-white group rounded-full"
         >
