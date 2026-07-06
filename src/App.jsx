@@ -14,7 +14,6 @@ function App() {
   });
   const [prediction, setPrediction] = useState([]);
   const handlePhase1Next = (data) => {
-    console.log("Data from Phase1:", data);
     setPrediction(data.prediction);
     setCurrentPhase(2);
   };
@@ -36,7 +35,6 @@ function App() {
     setAppData({ phase1: null, phase2: null });
     setCurrentPhase(1);
   };
-  console.log("Prediction in App:", prediction);
   return (
     <div
       className="min-h-screen flex flex-col font-sans text-base-content"

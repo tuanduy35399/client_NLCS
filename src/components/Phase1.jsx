@@ -24,7 +24,7 @@ const OPTIONAL_SUBJECTS = [
 ];
 // Anh xa qua khi goi API Backend
 const SUBJECT_MAP = {
-  Toán: "Toan",
+  "Toán": "Toan",
   "Ngữ Văn": "Ngu van",
   "Vật Lý": "Vat li",
   "Hóa Học": "Hoa hoc",
