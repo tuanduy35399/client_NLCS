@@ -19,7 +19,10 @@ function App() {
   };
 
   const handlePhase2Next = (data) => {
-    setAppData((prev) => ({ ...prev, phase2: data }));
+    setAppData((prev) => ({
+      ...prev,
+      phase2: data,
+    }));
     setCurrentPhase(3);
   };
 
@@ -92,7 +95,7 @@ function App() {
               className="h-full flex items-center justify-center"
             >
               <Phase3
-                data={appData.phase2}
+                userData2={appData.phase2}
                 onBack={handleBackToPhase2}
                 onRestart={handleRestart}
               />

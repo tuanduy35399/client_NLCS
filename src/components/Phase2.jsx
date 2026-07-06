@@ -1,14 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  ArrowLeft,
-  Send,
-  Sparkles,
-  Target,
-  Cpu,
-  Loader2,
-  Map,
-} from "lucide-react";
+import { ArrowLeft, Send, Loader2, Check } from "lucide-react";
 import { playClickSound } from "../utils/audio";
 
 // Giả lập dữ liệu ML.NET trả về
@@ -57,6 +49,17 @@ export default function Phase2({ prediction, onBack, onNext }) {
     if (!prompt.trim()) return;
     playClickSound();
     setIsLoading(true);
+
+    try {
+      const userData2 = {
+        selectedGroup,
+        prompt,
+      };
+      // console.log(data);
+      onNext(userData2);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -68,8 +71,6 @@ export default function Phase2({ prediction, onBack, onNext }) {
   //Them tab cho user de nhin hon
   const [activeTab, setActiveTab] = useState(0);
   const currentGroup = prediction?.[activeTab];
-
-  //Lọc dữ liệu trùng
 
   return (
     <motion.div
@@ -157,7 +158,9 @@ export default function Phase2({ prediction, onBack, onNext }) {
                     )}
 
                     <div className="flex justify-between items-start mb-4">
-                      <div className="p-2 rounded-xl bg-blue-500/10 text-blue-500"></div>
+                      <div className="p-2 rounded-2xl bg-blue-500/10 text-blue-500">
+                        {isSelected ? <Check className="w-5 h-5" /> : ""}
+                      </div>
 
                       <div className="badge badge-lg font-bold bg-base-100 shadow-sm">
                         {(element.XacSuat * 100).toFixed(2)}%
