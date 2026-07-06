@@ -45,7 +45,7 @@ export default function Phase3({ data, onBack, onRestart }) {
   };
 
   // Giả lập kết quả AI dựa trên nhóm ngành đã chọn
-  const getMockResult = () => {
+  const getResult = () => {
     const groupName = data?.selectedGroup?.name || "Nhóm ngành đã chọn";
     
     return {
@@ -61,7 +61,7 @@ export default function Phase3({ data, onBack, onRestart }) {
     };
   };
 
-  const result = getMockResult();
+  const result = getResult();
 
   return (
     <motion.div 
