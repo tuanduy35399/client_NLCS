@@ -277,7 +277,7 @@ export default function Phase1({ onNext, initialData }) {
         <div className="space-y-6">
           <div className="bg-secondary/5 p-6 rounded-xl border border-secondary/10 h-full flex flex-col">
             <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 text-secondary">
-              <Brain className="w-5 h-5" />
+              {/* <Brain className="w-5 h-5" /> */}
               Trắc Nghiệm Holland
             </h3>
 
