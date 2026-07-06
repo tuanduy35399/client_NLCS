@@ -128,11 +128,11 @@ export default function Phase3({ userData2, onBack, onRestart }) {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 1.05 }}
       transition={{ duration: 0.6, type: "spring", bounce: 0.4 }}
-      className="max-w-4xl mx-auto p-6 lg:p-10 bg-base-100 rounded-3xl shadow-2xl border border-primary/20 relative overflow-hidden"
+      className="max-w-4xl mx-auto p-6 lg:p-10 bg-base-100 rounded-xl shadow-2xl border border-primary/20 relative overflow-hidden"
     >
       {/* Background decorations */}
-      <div className="absolute top-0 right-0 -mt-20 -mr-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-64 h-64 bg-secondary/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute top-0 right-0 -mt-20 -mr-20 w-64 h-64 bg-primary/10 rounded-xl blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-64 h-64 bg-secondary/10 rounded-xl blur-3xl pointer-events-none"></div>
 
       <div className="flex items-center mb-8 relative z-10">
         <button
@@ -148,7 +148,7 @@ export default function Phase3({ userData2, onBack, onRestart }) {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-tr from-primary to-secondary text-white shadow-xl mb-4"
+          className="inline-flex items-center justify-center w-24 h-24 rounded-xl bg-gradient-to-tr from-primary to-secondary text-white shadow-xl mb-4"
         >
           <GraduationCap className="w-12 h-12" />
         </motion.div>
@@ -178,7 +178,7 @@ export default function Phase3({ userData2, onBack, onRestart }) {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.9 }}
-          className="bg-base-200/50 p-6 md:p-8 rounded-2xl text-left border border-base-300"
+          className="bg-base-200/50 p-6 md:p-8 rounded-xl text-left border border-base-300"
         >
           <p className="text-lg leading-relaxed mb-6">{result?.describe}</p>
           <div className="space-y-3">
@@ -199,7 +199,7 @@ export default function Phase3({ userData2, onBack, onRestart }) {
         >
           <button
             onClick={handleRestart}
-            className="btn btn-outline btn-primary rounded-full px-8"
+            className="btn btn-outline btn-primary rounded-xl px-8"
           >
             <RefreshCcw className="w-4 h-4 mr-2" />
             Bắt đầu lại

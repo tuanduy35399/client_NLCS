@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Send, Loader2, Check } from "lucide-react";
 import { playClickSound } from "../utils/audio";
@@ -78,7 +78,7 @@ export default function Phase2({ prediction, onBack, onNext }) {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -50 }}
       transition={{ duration: 0.5 }}
-      className="max-w-4xl mx-auto p-6 bg-base-100 rounded-3xl shadow-xl border border-base-200 flex flex-col min-h-[600px]"
+      className="max-w-4xl mx-auto p-6 bg-base-100 rounded-xl shadow-xl border border-base-200 flex flex-col min-h-[600px]"
     >
       <div className="flex items-center mb-8">
         <button
@@ -101,10 +101,9 @@ export default function Phase2({ prediction, onBack, onNext }) {
       </div>
 
       <div className="flex-1 flex flex-col gap-8">
-        {/* ML Results Area */}
         <div className="space-y-4">
           <p className="font-medium text-lg flex items-center gap-2">
-            <span className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold">
+            <span className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
               1
             </span>
             Chọn một nhóm ngành bạn quan tâm nhất:
@@ -115,7 +114,7 @@ export default function Phase2({ prediction, onBack, onNext }) {
                 key={index}
                 onClick={() => setActiveTab(index)}
                 className={`
-                      px-5 py-2 rounded-2xl font-semibold transition-all duration-300 shadow-sm
+                      px-5 py-2 rounded-xl font-semibold transition-all duration-300 shadow-sm
                       ${
                         activeTab === index
                           ? "bg-blue-600 text-white shadow-lg scale-105"
@@ -142,7 +141,7 @@ export default function Phase2({ prediction, onBack, onNext }) {
                     whileTap={{ scale: 0.98 }}
                     onClick={() => handleSelectGroup(element)}
                     className={`
-                cursor-pointer p-5 rounded-2xl border-2 transition-all duration-300 relative overflow-hidden
+                cursor-pointer p-5 rounded-xl border-2 transition-all duration-300 relative overflow-hidden
                 ${
                   isSelected
                     ? "bg-blue-500/10 shadow-lg border-blue-500"
@@ -158,7 +157,7 @@ export default function Phase2({ prediction, onBack, onNext }) {
                     )}
 
                     <div className="flex justify-between items-start mb-4">
-                      <div className="p-2 rounded-2xl bg-blue-500/10 text-blue-500">
+                      <div className="p-2 rounded-xl bg-blue-500/10 text-blue-500">
                         {isSelected ? <Check className="w-5 h-5" /> : ""}
                       </div>
 
@@ -190,7 +189,7 @@ export default function Phase2({ prediction, onBack, onNext }) {
                 <div className="divider my-0"></div>
                 <div className="flex-1 flex flex-col justify-end pt-6">
                   <p className="font-medium text-lg flex items-center gap-2 mb-4">
-                    <span className="w-8 h-8 rounded-full bg-secondary/10 text-secondary flex items-center justify-center font-bold">
+                    <span className="w-8 h-8 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center font-bold">
                       2
                     </span>
                     Kể thêm về bạn để AI gợi ý chuyên ngành cụ thể:
@@ -199,9 +198,9 @@ export default function Phase2({ prediction, onBack, onNext }) {
                   {/* Chat Bubble / Input Area */}
                   <div className="relative group">
                     <div
-                      className={`absolute -inset-0.5 bg-gradient-to-r from-primary to-secondary rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200 ${isLoading ? "animate-pulse opacity-50" : ""}`}
+                      className={`absolute -inset-0.5 bg-gradient-to-r from-primary to-secondary rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200 ${isLoading ? "animate-pulse opacity-50" : ""}`}
                     ></div>
-                    <div className="relative bg-base-100 rounded-3xl shadow-sm border border-base-200 p-2 flex items-end gap-2">
+                    <div className="relative bg-base-100 rounded-xl shadow-sm border border-base-200 p-2 flex items-end gap-2">
                       <textarea
                         className="textarea flex-1 min-h-[80px] max-h-[200px] border-none focus:outline-none resize-none bg-transparent text-base p-3"
                         placeholder={`Vui lòng mô tả chi tiết sở thích, tính cách hoặc mong muốn của bạn đối với ${Mapping[selectedGroup.NhomNganh]} để hệ thống gợi ý chuyên ngành cụ thể nhất...`}

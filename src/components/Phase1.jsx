@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
-  BookOpen,
-  GraduationCap,
   AlertCircle,
   Brain,
 } from "lucide-react";
@@ -144,12 +142,12 @@ export default function Phase1({ onNext, initialData }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
-      className="max-w-4xl mx-auto p-6 bg-base-100 rounded-3xl shadow-xl border border-base-200"
+      className="max-w-4xl mx-auto p-6 bg-base-100 rounded-xl shadow-xl border border-base-200"
     >
       <div className="text-center mb-10">
         <h2 className="text-3xl font-bold text-primary mb-2 flex items-center justify-center gap-2">
-          <BookOpen className="w-8 h-8" />
-          Nhập Điểm & Tính Cách
+          {/* <BookOpen className="w-8 h-8" /> */}
+          Nhập Điểm và Tính Cách
         </h2>
         <p className="text-base-content/70">
           Bước 1: Cung cấp thông tin học tập và sở thích của bạn để chúng tôi
@@ -160,14 +158,13 @@ export default function Phase1({ onNext, initialData }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Left Column: Grades */}
         <div className="space-y-6">
-          <div className="bg-primary/5 p-6 rounded-2xl border border-primary/10">
+          <div className="bg-primary/5 p-6 rounded-xl border border-primary/10">
             <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 text-primary">
-              <GraduationCap className="w-5 h-5" />
+              {/* <GraduationCap className="w-5 h-5" /> */}
               Điểm Học Tập
             </h3>
 
             <div className="space-y-4">
-              {/* Mandatory Subjects */}
               <div className="grid grid-cols-2 gap-3">
                 {[
                   { id: "math", label: "Toán" },
@@ -195,7 +192,6 @@ export default function Phase1({ onNext, initialData }) {
                 ))}
               </div>
 
-              {/* Optional Subjects */}
               <div className="space-y-3 pt-2">
                 <label className="label py-1">
                   <span className="label-text font-medium">Môn tự chọn 1</span>
@@ -268,7 +264,6 @@ export default function Phase1({ onNext, initialData }) {
                 </div>
               </div>
 
-              {/* Error summary */}
               {Object.keys(errors).some((k) => k !== "holland") && (
                 <div className="text-error text-sm flex items-center gap-1 mt-2">
                   <AlertCircle className="w-4 h-4" /> Vui lòng kiểm tra lại điểm
@@ -279,9 +274,8 @@ export default function Phase1({ onNext, initialData }) {
           </div>
         </div>
 
-        {/* Right Column: Holland Test */}
         <div className="space-y-6">
-          <div className="bg-secondary/5 p-6 rounded-2xl border border-secondary/10 h-full flex flex-col">
+          <div className="bg-secondary/5 p-6 rounded-xl border border-secondary/10 h-full flex flex-col">
             <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 text-secondary">
               <Brain className="w-5 h-5" />
               Trắc Nghiệm Holland
@@ -312,7 +306,7 @@ export default function Phase1({ onNext, initialData }) {
                 >
                   {/* <HeartPulse className="w-5 h-5 mr-2 group-hover:animate-ping absolute opacity-50" />
                   <HeartPulse className="w-5 h-5 mr-2" /> */}
-                  Làm bài trắc nghiệm tại đây nhé!
+                  Làm bài trắc nghiệm tại đây nha!
                 </motion.a>
 
                 <p className="mt-4 text-xs text-base-content/50 leading-relaxed max-w-[90%] mx-auto">
@@ -333,7 +327,7 @@ export default function Phase1({ onNext, initialData }) {
                 </label>
                 <input
                   type="text"
-                  placeholder="Nhập 3 chữ cái..."
+                  placeholder="Nhập 1 chữ cái..."
                   className={`input input-bordered w-full uppercase focus:outline-secondary ${errors.holland ? "input-error" : ""}`}
                   value={hollandCode}
                   onChange={(e) =>
@@ -360,7 +354,7 @@ export default function Phase1({ onNext, initialData }) {
       <div className="mt-10 flex justify-end">
         <button
           onClick={handleContinue}
-          className="btn btn-primary px-8 text-white group rounded-full"
+          className="btn btn-primary px-8 text-white group rounded-l"
         >
           Tiếp tục
           <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
