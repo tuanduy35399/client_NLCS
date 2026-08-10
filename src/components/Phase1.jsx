@@ -3,10 +3,9 @@ import { motion } from "framer-motion";
 import {
   ArrowRight,
   AlertCircle,
-  Brain,
 } from "lucide-react";
 import { playClickSound } from "../utils/audio";
-import axios from "axios";
+import api from "../api";
 
 //Danh sach cac mon hien thi tren dropdown list
 const OPTIONAL_SUBJECTS = [
@@ -54,6 +53,7 @@ export default function Phase1({ onNext, initialData }) {
     initialData?.hollandCode || "",
   );
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const subjects = [
     "Toan",
     "Ngu van",
@@ -100,7 +100,7 @@ export default function Phase1({ onNext, initialData }) {
   };
 
   const predict_api = async (data_user) => {
-    const res = await axios.post("http://127.0.0.1:8000/predict/", data_user);
+    const res = await api.post("/predict", data_user);
     return res.data;
   };
   const handleContinue = async () => {
@@ -129,11 +129,21 @@ export default function Phase1({ onNext, initialData }) {
     };
     console.log(data_user);
     //Goi API du doan tu ML PhanLop
-    const kq = await predict_api(data_user);
-    console.log("Ket qua du doan: \n", kq);
-    onNext({
-      prediction: kq.recommendations,
-    });
+    setIsLoading(true);
+    try {
+      const kq = await predict_api(data_user);
+      onNext({
+        prediction: kq.recommendations,
+      });
+    } catch (error) {
+      console.error("Không thể gọi API dự đoán", error);
+      setErrors((current) => ({
+        ...current,
+        api: "Không kết nối được với máy chủ. Vui lòng thử lại.",
+      }));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -352,11 +362,17 @@ export default function Phase1({ onNext, initialData }) {
       </div>
 
       <div className="mt-10 flex justify-end">
+        {errors.api && (
+          <span className="text-error text-sm mr-4 self-center">
+            {errors.api}
+          </span>
+        )}
         <button
           onClick={handleContinue}
+          disabled={isLoading}
           className="btn btn-primary px-8 text-white group rounded-l"
         >
-          Tiếp tục
+          {isLoading ? "Đang phân tích..." : "Tiếp tục"}
           <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
         </button>
       </div>
