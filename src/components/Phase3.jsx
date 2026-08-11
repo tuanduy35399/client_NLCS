@@ -40,7 +40,11 @@ const answerToMarkdown = (answer) => {
     sections.push(`> **Lưu ý về định hướng**\n> ${answer.thong_bao_dinh_huong}`);
   }
   if (answer.goi_y_tiep_theo) sections.push(`## Bạn có thể làm gì tiếp theo?\n${answer.goi_y_tiep_theo}`);
-  if (answer.nguon_tham_khao) sections.push(`---\n*Nguồn tham khảo: ${answer.nguon_tham_khao}*`);
+  if (answer.nguon_tham_khao) {
+    sections.push(
+      `---\n**Nguồn tham khảo:** [Xem bài giới thiệu ngành tại Đại học Cần Thơ](${answer.nguon_tham_khao})`,
+    );
+  }
 
   return sections.join("\n\n");
 };
@@ -62,6 +66,16 @@ const MarkdownContent = ({ children }) => (
         </blockquote>
       ),
       hr: () => <hr className="my-5 border-base-300" />,
+      a: ({ href, children: label }) => (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-primary underline decoration-primary/40 underline-offset-4 hover:decoration-primary"
+        >
+          {label}
+        </a>
+      ),
     }}
   >
     {children}

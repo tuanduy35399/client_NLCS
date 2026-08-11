@@ -34,6 +34,28 @@ const Mapping = {
   CongNgheThongTin_TruyenThong: "Công nghệ thông tin và Truyền thông",
   NgoaiNgu: "Ngoại ngữ",
 };
+
+const SUBJECT_LABELS = {
+  Toan: "Toán",
+  "Ngu van": "Ngữ văn",
+  "Vat li": "Vật lí",
+  "Hoa hoc": "Hóa học",
+  "Sinh hoc": "Sinh học",
+  "Lich su": "Lịch sử",
+  "Dia li": "Địa lí",
+  "Tieng Anh": "Tiếng Anh",
+  "Tieng Phap": "Tiếng Pháp",
+  "Tin hoc": "Tin học",
+  "Giao duc cong dan": "Giáo dục kinh tế và pháp luật",
+  "Giao duc KT&PL": "Giáo dục kinh tế và pháp luật",
+  "Cong nghe cong nghiep": "Công nghệ công nghiệp",
+  "Cong nghe nong nghiep": "Công nghệ nông nghiệp",
+  "Nang khieu GDMN": "Năng khiếu giáo dục mầm non",
+  "Nang khieu TDTT": "Năng khiếu thể dục thể thao",
+  "Ve my thuat": "Vẽ mỹ thuật",
+};
+
+const getSubjectLabel = (subject) => SUBJECT_LABELS[subject] || subject;
 export default function Phase2({ prediction, onBack, onNext }) {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [prompt, setPrompt] = useState("");
@@ -129,6 +151,20 @@ export default function Phase2({ prediction, onBack, onNext }) {
           <div className="mb-3 text-xl text-gray-500">
             Điểm tổ hợp: <b>{currentGroup?.DiemToHop}</b>
           </div>
+          {currentGroup?.MonHoc?.length > 0 && (
+            <div className="mb-5 rounded-xl border border-primary/15 bg-primary/5 p-4">
+              <p className="mb-2 text-sm font-semibold text-base-content/70">
+                Tổ hợp {currentGroup.MaToHop} gồm các môn:
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {currentGroup.MonHoc.map((subject) => (
+                  <span key={subject} className="badge badge-primary badge-outline px-3 py-3">
+                    {getSubjectLabel(subject)}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {currentGroup?.Top3.filter((item) => item.XacSuat > 0).map(
               (element, index) => {

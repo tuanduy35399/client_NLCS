@@ -34,6 +34,15 @@ const SUBJECT_MAP = {
   "Công nghệ nông nghiệp": "Cong nghe nong nghiep",
 };
 
+const HOLLAND_OPTIONS = [
+  { code: "R", label: "Kỹ thuật" },
+  { code: "I", label: "Nghiên cứu" },
+  { code: "A", label: "Nghệ thuật" },
+  { code: "S", label: "Xã hội" },
+  { code: "E", label: "Quản lý" },
+  { code: "C", label: "Nghiệp vụ" },
+];
+
 export default function Phase1({ onNext, initialData }) {
   const [grades, setGrades] = useState(
     initialData?.grades || {
@@ -91,6 +100,16 @@ export default function Phase1({ onNext, initialData }) {
     if (dropdown === "opt2") handleGradeChange("optional2", "");
   };
 
+  const handleHollandSelect = (code) => {
+    playClickSound();
+    setHollandCode(code);
+    setErrors((current) => {
+      const nextErrors = { ...current };
+      delete nextErrors.holland;
+      return nextErrors;
+    });
+  };
+
   const getAvailableSubjects = (currentDropdown) => {
     const otherDropdown =
       currentDropdown === "opt1"
@@ -115,8 +134,8 @@ export default function Phase1({ onNext, initialData }) {
 
     if (!selectedSubjects.opt1) newErrors.opt1 = "Vui lòng chọn môn";
     if (!selectedSubjects.opt2) newErrors.opt2 = "Vui lòng chọn môn";
-    if (!hollandCode || hollandCode.length > 1)
-      newErrors.holland = "Vui lòng nhập mã viết tắt Holland (ví dụ: R hoặc I)";
+    if (!/^[RIASEC]$/.test(hollandCode))
+      newErrors.holland = "Mã Holland chỉ gồm một ký tự: R, I, A, S, E hoặc C";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -329,27 +348,34 @@ export default function Phase1({ onNext, initialData }) {
               <div className="form-control w-full">
                 <label className="label">
                   <span className="label-text font-medium text-base">
-                    Nhập mã Holland của bạn
+                    Chọn nhóm Holland của bạn
                   </span>
                   <span className="label-text-alt text-base-content/60">
-                    VD: R hoặc I
+                    Chọn một nhóm
                   </span>
                 </label>
-                <input
-                  type="text"
-                  placeholder="Nhập 1 chữ cái..."
-                  className={`input input-bordered w-full uppercase focus:outline-secondary ${errors.holland ? "input-error" : ""}`}
-                  value={hollandCode}
-                  onChange={(e) =>
-                    setHollandCode(
-                      e.target.value
-                        .toUpperCase()
-                        .replace(/[^a-zA-Z]/g, "")
-                        .slice(0, 1),
-                    )
-                  }
-                  maxLength={3}
-                />
+                <div
+                  className={`grid grid-cols-2 gap-2 rounded-xl ${errors.holland ? "ring-2 ring-error/60" : ""}`}
+                  role="radiogroup"
+                  aria-label="Chọn nhóm tính cách Holland"
+                >
+                  {HOLLAND_OPTIONS.map(({ code, label }) => (
+                    <button
+                      key={code}
+                      type="button"
+                      role="radio"
+                      onClick={() => handleHollandSelect(code)}
+                      className={`btn h-auto min-h-14 justify-start rounded-xl px-4 ${hollandCode === code ? "btn-secondary text-white" : "btn-outline border-base-300 hover:border-secondary hover:bg-secondary/10 hover:text-secondary"}`}
+                      aria-pressed={hollandCode === code}
+                      aria-checked={hollandCode === code}
+                    >
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-base-100/20 text-lg font-black">
+                        {code}
+                      </span>
+                      <span className="font-medium">{label}</span>
+                    </button>
+                  ))}
+                </div>
                 {errors.holland && (
                   <span className="text-error text-sm mt-1">
                     {errors.holland}
