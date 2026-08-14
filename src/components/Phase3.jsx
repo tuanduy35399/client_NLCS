@@ -232,7 +232,7 @@ export default function Phase3({ userData2, onBack, onRestart }) {
     //   animate={{ opacity: 1, y: 0 }}
     //   className="relative mx-auto h-[calc(100dvh-5rem)] min-h-[36rem] w-full max-w-[90rem] overflow-hidden rounded-3xl border border-primary/15 bg-base-100 shadow-2xl"
     // >
-    <div className="h-[calc(100dvh-1rem)]">
+    <div className="h-[calc(100dvh-9rem)]">
       <div className="pointer-events-none absolute -right-24 -top-24 h-72 rounded-full bg-primary/10 blur-3xl" />
       <div className="relative flex h-full min-h-0 flex-col ">
         <div className=" flex shrink-0 items-center justify-between gap-4">

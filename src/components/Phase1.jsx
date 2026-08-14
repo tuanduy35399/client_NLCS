@@ -132,7 +132,7 @@ export default function Phase1({ onNext, initialData }) {
     if (!selectedSubjects.opt1) newErrors.opt1 = "Vui lòng chọn môn";
     if (!selectedSubjects.opt2) newErrors.opt2 = "Vui lòng chọn môn";
     if (!/^[RIASEC]$/.test(hollandCode))
-      newErrors.holland = "Mã Holland chỉ gồm một ký tự: R, I, A, S, E hoặc C";
+      newErrors.holland = "Mã Holland chỉ gồm một trong các ký tự: R, I, A, S, E, C";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);

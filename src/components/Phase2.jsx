@@ -3,12 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Send, Loader2, Check } from "lucide-react";
 import { playClickSound } from "../utils/audio";
 
-// Giả lập dữ liệu ML.NET trả về
-// const MOCK_ML_RESULTS = [
-//   { id: 1, name: "Nhóm ngành Máy tính & CNTT", match: 94, icon: Cpu, color: "text-blue-500", bg: "bg-blue-500/10", border: "border-blue-500" },
-//   { id: 2, name: "Nhóm ngành Kinh doanh & Quản lý", match: 82, icon: Target, color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500" },
-//   { id: 3, name: "Nhóm ngành Mỹ thuật ứng dụng", match: 65, icon: Sparkles, color: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500" },
-// ];
 const Mapping = {
   GiaoDucMamNon: "Giáo dục Mầm non",
   GiaoDucTieuHoc: "Giáo dục Tiểu học",
@@ -35,6 +29,14 @@ const Mapping = {
   NgoaiNgu: "Ngoại ngữ",
 };
 
+const HOLLAND_FULL_NAME = {
+  R: "Realistic",
+  I: "Investigative",
+  A: "Artistic",
+  S: "Social",
+  E: "Enterprising",
+  C: "Conventional",
+};
 const SUBJECT_LABELS = {
   Toan: "Toán",
   "Ngu van": "Ngữ văn",
@@ -93,7 +95,7 @@ export default function Phase2({ prediction, onBack, onNext }) {
   //Them tab cho user de nhin hon
   const [activeTab, setActiveTab] = useState(0);
   const currentGroup = prediction?.[activeTab];
-
+  console.log(prediction);
   return (
     <motion.div
       initial={{ opacity: 0, x: 50 }}
@@ -129,12 +131,13 @@ export default function Phase2({ prediction, onBack, onNext }) {
             </span>
             Chọn một nhóm ngành bạn quan tâm nhất:
           </p>
-          <div className="flex gap-3 mb-6 flex-wrap">
-            {prediction?.map((item, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveTab(index)}
-                className={`
+          <div className="flex flex-cols justify-between">
+            <div className="flex gap-3 flex-wrap">
+              {prediction?.map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveTab(index)}
+                  className={`
                       px-5 py-2 font-semibold transition-all duration-300 shadow-sm
                       ${
                         activeTab === index
@@ -142,10 +145,16 @@ export default function Phase2({ prediction, onBack, onNext }) {
                           : "bg-gray-100 hover:bg-gray-200 text-gray-700"
                       }
                     `}
-              >
-                {item.MaToHop}
-              </button>
-            ))}
+                >
+                  {item.MaToHop}
+                </button>
+              ))}
+            </div>
+            <div className="px-5 py-2 font-semibold transition-all duration-300 shadow-sm bg-pink-600 text-white shadow-lg scale-105">
+              <span>
+                Tính cách đã chọn: {HOLLAND_FULL_NAME[prediction[0]?.Holland]}
+              </span>
+            </div>
           </div>
           <div className="mb-3 text-xl text-gray-500">
             Điểm tổ hợp: <b>{currentGroup?.DiemToHop}</b>
