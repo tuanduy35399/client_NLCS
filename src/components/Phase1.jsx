@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  AlertCircle,
-} from "lucide-react";
+import { ArrowRight, AlertCircle } from "lucide-react";
 import { playClickSound } from "../utils/audio";
 import api from "../api";
 
@@ -21,7 +18,7 @@ const OPTIONAL_SUBJECTS = [
 ];
 // Anh xa qua khi goi API Backend
 const SUBJECT_MAP = {
-  "Toán": "Toan",
+  Toán: "Toan",
   "Ngữ Văn": "Ngu van",
   "Vật Lý": "Vat li",
   "Hóa Học": "Hoa hoc",
@@ -179,8 +176,7 @@ export default function Phase1({ onNext, initialData }) {
           Nhập Điểm và Tính Cách
         </h2>
         <p className="text-base-content/70">
-          Bước 1: Cung cấp thông tin học tập và sở thích của bạn để chúng tôi
-          phân tích
+          Cung cấp thông tin học tập và sở thích của bạn
         </p>
       </div>
 

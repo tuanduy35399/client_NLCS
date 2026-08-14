@@ -116,7 +116,7 @@ export default function Phase2({ prediction, onBack, onNext }) {
             Phân Tích và Thu Hẹp Ngành Học
           </h2>
           <p className="text-sm text-base-content/60 mt-1">
-            Hệ thống AI đề xuất các nhóm ngành phù hợp nhất
+            Mô hình ML đề xuất các nhóm ngành phù hợp nhất
           </p>
         </div>
       </div>
