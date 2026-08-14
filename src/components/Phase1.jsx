@@ -171,7 +171,7 @@ export default function Phase1({ onNext, initialData }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
-      className="max-w-4xl mx-auto p-6 bg-base-100 rounded-xl shadow-xl border border-base-200"
+      className="max-w-5xl mx-auto p-6 "
     >
       <div className="text-center mb-10">
         <h2 className="text-3xl font-bold text-primary mb-2 flex items-center justify-center gap-2">

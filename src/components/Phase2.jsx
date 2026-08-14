@@ -67,7 +67,7 @@ export default function Phase2({ prediction, onBack, onNext }) {
   };
 
   const handleSend = () => {
-    if (!selectedGroup) return; // Prevent sending if no group selected
+    if (!selectedGroup) return; // Chan hien thi box chat lai neu khong chon nhom nganh
     if (!prompt.trim()) return;
     playClickSound();
     setIsLoading(true);
@@ -100,7 +100,6 @@ export default function Phase2({ prediction, onBack, onNext }) {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -50 }}
       transition={{ duration: 0.5 }}
-      className="max-w-4xl mx-auto p-6 bg-base-100 rounded-xl shadow-xl border border-base-200 flex flex-col min-h-[600px]"
     >
       <div className="flex items-center mb-8">
         <button
@@ -114,7 +113,7 @@ export default function Phase2({ prediction, onBack, onNext }) {
         </button>
         <div className="flex-1 text-center pr-12">
           <h2 className="text-2xl font-bold text-primary">
-            Phân Tích & Thu Hẹp Ngành Học
+            Phân Tích và Thu Hẹp Ngành Học
           </h2>
           <p className="text-sm text-base-content/60 mt-1">
             Hệ thống AI đề xuất các nhóm ngành phù hợp nhất
@@ -136,7 +135,7 @@ export default function Phase2({ prediction, onBack, onNext }) {
                 key={index}
                 onClick={() => setActiveTab(index)}
                 className={`
-                      px-5 py-2 rounded-xl font-semibold transition-all duration-300 shadow-sm
+                      px-5 py-2 font-semibold transition-all duration-300 shadow-sm
                       ${
                         activeTab === index
                           ? "bg-blue-600 text-white shadow-lg scale-105"
@@ -152,13 +151,16 @@ export default function Phase2({ prediction, onBack, onNext }) {
             Điểm tổ hợp: <b>{currentGroup?.DiemToHop}</b>
           </div>
           {currentGroup?.MonHoc?.length > 0 && (
-            <div className="mb-5 rounded-xl border border-primary/15 bg-primary/5 p-4">
+            <div className="mb-5  border border-primary/15 bg-primary/5 p-4">
               <p className="mb-2 text-sm font-semibold text-base-content/70">
                 Tổ hợp {currentGroup.MaToHop} gồm các môn:
               </p>
               <div className="flex flex-wrap gap-2">
                 {currentGroup.MonHoc.map((subject) => (
-                  <span key={subject} className="badge badge-primary badge-outline px-3 py-3">
+                  <span
+                    key={subject}
+                    className="badge badge-primary badge-outline px-3 py-3"
+                  >
                     {getSubjectLabel(subject)}
                   </span>
                 ))}
@@ -177,7 +179,7 @@ export default function Phase2({ prediction, onBack, onNext }) {
                     whileTap={{ scale: 0.98 }}
                     onClick={() => handleSelectGroup(element)}
                     className={`
-                cursor-pointer p-5 rounded-xl border-2 transition-all duration-300 relative overflow-hidden
+                cursor-pointer p-5  border-2 transition-all duration-300 relative overflow-hidden
                 ${
                   isSelected
                     ? "bg-blue-500/10 shadow-lg border-blue-500"
