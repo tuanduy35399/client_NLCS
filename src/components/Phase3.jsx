@@ -1,9 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { ArrowLeft, Bot, RefreshCcw, Send, UserRound } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowLeft, Bot, Plus, Send, UserRound, X } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import confetti from "canvas-confetti";
-import { playClickSound } from "../utils/audio";
 import api from "../api";
 
 // React StrictMode chạy effect hai lần trong development. Cache Promise đang
@@ -100,12 +98,22 @@ const launchConfetti = () => {
   });
 };
 
-export default function Phase3({ userData2, onBack, onRestart }) {
-  const [result, setResult] = useState(null);
-  const [messages, setMessages] = useState([]);
-  const [draft, setDraft] = useState("");
+const createId = () =>
+  globalThis.crypto?.randomUUID?.() ??
+  `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
+const shortTitle = (content, fallback = "Câu hỏi mới") => {
+  const normalized = content.trim().replace(/\s+/g, " ");
+  if (!normalized) return fallback;
+  return normalized.length > 42 ? `${normalized.slice(0, 42)}…` : normalized;
+};
+
+export default function Phase3({ userData2, onBack }) {
+  const [hasInitialResult, setHasInitialResult] = useState(false);
+  const [topics, setTopics] = useState([]);
+  const [activeTopicId, setActiveTopicId] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [sending, setSending] = useState(false);
+  const [sendingTopicIds, setSendingTopicIds] = useState([]);
   const [error, setError] = useState("");
   const chatEndRef = useRef(null);
 
@@ -127,11 +135,24 @@ export default function Phase3({ userData2, onBack, onRestart }) {
 
         if (!cancelled) {
           const answer = response.data.answer;
-          setResult(answer);
-          setMessages([
-            { role: "user", content: initialPrompt },
-            { role: "assistant", content: answerToMarkdown(answer), answer },
+          const topicId = createId();
+          setHasInitialResult(true);
+          setTopics([
+            {
+              id: topicId,
+              title: shortTitle(initialPrompt, "Tư vấn ban đầu"),
+              draft: "",
+              messages: [
+                { role: "user", content: initialPrompt },
+                {
+                  role: "assistant",
+                  content: answerToMarkdown(answer),
+                  answer,
+                },
+              ],
+            },
           ]);
+          setActiveTopicId(topicId);
           if (answer.phu_hop_nhom) launchConfetti();
         }
       } catch (requestError) {
@@ -151,6 +172,12 @@ export default function Phase3({ userData2, onBack, onRestart }) {
     };
   }, [userData2, selectedGroup, initialPrompt]);
 
+  const activeTopic =
+    topics.find((topic) => topic.id === activeTopicId) ?? topics[0];
+  const messages = activeTopic?.messages ?? [];
+  const draft = activeTopic?.draft ?? "";
+  const sending = sendingTopicIds.includes(activeTopic?.id);
+
   useEffect(() => {
     if (messages.length > 2 || sending) {
       chatEndRef.current?.scrollIntoView({
@@ -158,22 +185,56 @@ export default function Phase3({ userData2, onBack, onRestart }) {
         block: "nearest",
       });
     }
-  }, [messages, sending]);
+  }, [activeTopicId, messages.length, sending]);
 
-  const apiHistory = useMemo(
-    () => messages.map(({ role, content }) => ({ role, content })).slice(-8),
-    [messages],
-  );
+  const updateTopic = (topicId, updater) => {
+    setTopics((current) =>
+      current.map((topic) => (topic.id === topicId ? updater(topic) : topic)),
+    );
+  };
+
+  const addTopic = () => {
+    const topicId = createId();
+    setTopics((current) => [
+      ...current,
+      { id: topicId, title: "Câu hỏi mới", draft: "", messages: [] },
+    ]);
+    setActiveTopicId(topicId);
+  };
+
+  const removeTopic = (topicId) => {
+    if (topics.length === 1 || sendingTopicIds.includes(topicId)) return;
+    const removedIndex = topics.findIndex((topic) => topic.id === topicId);
+    const remaining = topics.filter((topic) => topic.id !== topicId);
+    setTopics(remaining);
+    if (activeTopicId === topicId) {
+      const nextIndex = Math.min(Math.max(removedIndex - 1, 0), remaining.length - 1);
+      setActiveTopicId(remaining[nextIndex].id);
+    }
+  };
 
   const sendMessage = async (event) => {
     event.preventDefault();
     const content = draft.trim();
-    if (!content || sending) return;
+    if (!content || sending || !activeTopic) return;
 
-    setDraft("");
-    setSending(true);
+    const topicId = activeTopic.id;
+    const apiHistory = activeTopic.messages
+      .map(({ role, content: messageContent }) => ({
+        role,
+        content: messageContent,
+      }))
+      .slice(-8);
+
+    updateTopic(topicId, (topic) => ({
+      ...topic,
+      title:
+        topic.messages.length === 0 ? shortTitle(content) : topic.title,
+      draft: "",
+      messages: [...topic.messages, { role: "user", content }],
+    }));
+    setSendingTopicIds((current) => [...current, topicId]);
     setError("");
-    setMessages((current) => [...current, { role: "user", content }]);
 
     try {
       const response = await api.post("/chat", {
@@ -182,23 +243,30 @@ export default function Phase3({ userData2, onBack, onRestart }) {
         history: apiHistory,
       });
       const answer = response.data.answer;
-      setResult(answer);
-      setMessages((current) => [
-        ...current,
-        { role: "assistant", content: answerToMarkdown(answer), answer },
-      ]);
+      updateTopic(topicId, (topic) => ({
+        ...topic,
+        messages: [
+          ...topic.messages,
+          { role: "assistant", content: answerToMarkdown(answer), answer },
+        ],
+      }));
     } catch (requestError) {
       console.error("Không thể gửi câu hỏi tiếp theo", requestError);
-      setMessages((current) => [
-        ...current,
-        {
-          role: "assistant",
-          content:
-            "Mình chưa thể trả lời lúc này. Bạn vui lòng thử gửi lại câu hỏi.",
-        },
-      ]);
+      updateTopic(topicId, (topic) => ({
+        ...topic,
+        messages: [
+          ...topic.messages,
+          {
+            role: "assistant",
+            content:
+              "Mình chưa thể trả lời lúc này. Bạn vui lòng thử gửi lại câu hỏi.",
+          },
+        ],
+      }));
     } finally {
-      setSending(false);
+      setSendingTopicIds((current) =>
+        current.filter((currentId) => currentId !== topicId),
+      );
     }
   };
 
@@ -215,7 +283,7 @@ export default function Phase3({ userData2, onBack, onRestart }) {
     );
   }
 
-  if (error && !result) {
+  if (error && !hasInitialResult) {
     return (
       <div className="alert alert-error mx-auto max-w-xl">
         <span>{error}</span>
@@ -252,6 +320,54 @@ export default function Phase3({ userData2, onBack, onRestart }) {
           className="mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col"
           aria-labelledby="chat-heading"
         >
+          <div className="mb-3 flex shrink-0 items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:thin]">
+            {topics.map((topic, index) => {
+              const isActive = topic.id === activeTopic?.id;
+              const isPending = sendingTopicIds.includes(topic.id);
+              return (
+                <div
+                  key={topic.id}
+                  className={`group flex shrink-0 items-center rounded-full border transition-colors ${
+                    isActive
+                      ? "border-primary bg-primary text-primary-content"
+                      : "border-base-300 bg-base-100 hover:border-primary/50"
+                  }`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setActiveTopicId(topic.id)}
+                    className="flex max-w-64 items-center gap-2 py-2 pl-4 pr-2 text-sm font-medium"
+                    title={topic.title}
+                    aria-current={isActive ? "page" : undefined}
+                  >
+                    <span className="opacity-70">#{index + 1}</span>
+                    <span className="truncate">{topic.title}</span>
+                    {isPending && (
+                      <span className="loading loading-spinner loading-xs" />
+                    )}
+                  </button>
+                  {topics.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeTopic(topic.id)}
+                      disabled={isPending}
+                      className="mr-1 rounded-full p-1.5 opacity-60 hover:bg-black/10 hover:opacity-100 disabled:cursor-not-allowed"
+                      aria-label={`Đóng ${topic.title}`}
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+            <button
+              type="button"
+              onClick={addTopic}
+              className="btn btn-sm shrink-0 rounded-full border-dashed"
+            >
+              <Plus className="h-4 w-4" /> Câu hỏi mới
+            </button>
+          </div>
           {/* <div className="mb-4 flex shrink-0 items-center gap-3">
             <div className="rounded-xl bg-primary/10 p-2 text-primary">
               <Bot className="h-5 w-5" />
@@ -307,7 +423,13 @@ export default function Phase3({ userData2, onBack, onRestart }) {
               <span className="sr-only">Nhập câu hỏi tiếp theo</span>
               <textarea
                 value={draft}
-                onChange={(event) => setDraft(event.target.value)}
+                onChange={(event) => {
+                  const nextDraft = event.target.value;
+                  updateTopic(activeTopic.id, (topic) => ({
+                    ...topic,
+                    draft: nextDraft,
+                  }));
+                }}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" && !event.shiftKey) {
                     event.preventDefault();
@@ -315,7 +437,11 @@ export default function Phase3({ userData2, onBack, onRestart }) {
                   }
                 }}
                 className="textarea textarea-bordered min-h-14 w-full resize-none rounded-xl focus:textarea-primary"
-                placeholder="Ví dụ: Ngành này cần học tốt môn nào?"
+                placeholder={
+                  messages.length === 0
+                    ? "Nhập câu hỏi cho chủ đề mới..."
+                    : "Hỏi tiếp trong chủ đề này..."
+                }
                 rows={2}
                 disabled={sending}
               />
